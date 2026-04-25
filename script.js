@@ -203,69 +203,25 @@
 
 
     /* =====================================================
-       FORMULARIO CONTACTO — EmailJS
-       ─────────────────────────────────────────────────────
-       CÓMO CONFIGURAR (una sola vez):
-       1. Crea cuenta GRATIS en https://www.emailjs.com
-       2. Ve a "Email Services" → "Add New Service"
-          → elige Gmail → conecta neuriaxx@gmail.com
-          → copia el Service ID
-       3. Ve a "Email Templates" → "Create New Template"
-          ── PLANTILLA 1 (para ti, el propietario) ──
-             To:      neuriaxx@gmail.com
-             Subject: Nueva solicitud RusoFit — {{nombre}}
-             Body:
-               🏋️ NUEVA SOLICITUD
-               Nombre:      {{nombre}}
-               Correo:      {{correo}}
-               WhatsApp:    {{whatsapp}}
-               Objetivo:    {{objetivo}}
-               Días/sem.:   {{dias}}
-               Experiencia: {{experiencia}}
-               Sin result.: {{tiempo}}
-               Lesiones:    {{lesiones}}
-          → copia el Template ID → ponlo en EMAILJS_TEMPLATE_OWNER
-          ── PLANTILLA 2 (confirmación para el cliente) ──
-             To:      {{correo}}
-             Subject: ¡Solicitud recibida, {{nombre}}! 🔥
-             Body:
-               Hola {{nombre}},
-               Tu solicitud a RusoFit ha sido recibida.
-               Ruso te escribirá en menos de 24h al WhatsApp {{whatsapp}}.
-               Si quieres hablar antes: +34 677 119 453
-               El equipo RusoFit
-          → copia el Template ID → ponlo en EMAILJS_TEMPLATE_CLIENT
-       4. Ve a "Account" → "General" → copia tu Public Key
-       5. Sustituye los 4 valores de abajo con los tuyos
+       FORMULARIO CONTACTO — WhatsApp directo
        ===================================================== */
-
-    var EMAILJS_PUBLIC_KEY      = '7i1XqcX9I2ZKEbQ3H';
-    var EMAILJS_SERVICE_ID      = 'service_tjscmwc';
-    var EMAILJS_TEMPLATE_OWNER  = 'template_lylnqnb';
-    var EMAILJS_TEMPLATE_CLIENT = 'template_bhqekwt';
 
     var contactForm = document.getElementById('contactForm');
     var formSuccess = document.getElementById('formSuccess');
     var formBtn     = document.getElementById('formBtn');
 
-    var BTN_DEFAULT = 'Enviar solicitud <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-
     if (contactForm && formSuccess && formBtn) {
-
-        if (typeof emailjs !== 'undefined') {
-            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-        }
 
         /* — clear error state on input — */
         contactForm.querySelectorAll('.form__input').forEach(function (el) {
-            el.addEventListener('input', function () { this.classList.remove('error'); });
+            el.addEventListener('input',  function () { this.classList.remove('error'); });
             el.addEventListener('change', function () { this.classList.remove('error'); });
         });
 
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            /* Basic required-field validation */
+            /* Validación campos obligatorios */
             var valid = true;
             contactForm.querySelectorAll('[required]').forEach(function (field) {
                 field.classList.remove('error');
@@ -280,70 +236,49 @@
                 return;
             }
 
-            /* Email format validation */
-            var emailField = document.getElementById('f-correo');
-            var emailRe    = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-            if (!emailRe.test(emailField.value.trim())) {
-                emailField.classList.add('error');
-                emailField.focus();
-                return;
-            }
+            /* Recoger datos */
+            var nombre      = document.getElementById('f-nombre').value.trim();
+            var correo      = document.getElementById('f-correo').value.trim();
+            var whatsapp    = document.getElementById('f-whatsapp').value.trim();
+            var objetivo    = document.getElementById('f-objetivo').value;
+            var dias        = document.getElementById('f-dias').value;
+            var experiencia = document.getElementById('f-experiencia').value;
+            var tiempo      = document.getElementById('f-tiempo').value;
+            var lesiones    = document.getElementById('f-lesiones').value.trim() || 'Ninguna';
 
-            /* Collect params */
-            var params = {
-                nombre:      document.getElementById('f-nombre').value.trim(),
-                correo:      document.getElementById('f-correo').value.trim(),
-                whatsapp:    document.getElementById('f-whatsapp').value.trim(),
-                objetivo:    document.getElementById('f-objetivo').value,
-                dias:        document.getElementById('f-dias').value,
-                experiencia: document.getElementById('f-experiencia').value,
-                tiempo:      document.getElementById('f-tiempo').value,
-                lesiones:    (document.getElementById('f-lesiones').value.trim() || 'Ninguna')
-            };
+            /* Mensaje WhatsApp profesional */
+            var msg = [
+                'Hola Ruso \uD83D\uDC4B Te escribo desde RusoFit.com',
+                '',
+                '\uD83D\uDCCB *NUEVA SOLICITUD*',
+                '',
+                '*Nombre:* '      + nombre,
+                '*Correo:* '      + correo,
+                '*WhatsApp:* '    + whatsapp,
+                '',
+                '*Objetivo:* '             + objetivo,
+                '*D\u00edas disponibles:* ' + dias,
+                '*Nivel:* '                + experiencia,
+                '*Sin resultados desde:* ' + tiempo,
+                '*Lesiones:* '             + lesiones,
+                '',
+                '\uD83D\uDCAA Espero tu respuesta'
+            ].join('\n');
 
-            /* Disable button while sending */
-            formBtn.disabled  = true;
-            formBtn.innerHTML = 'Enviando\u2026';
+            /* Mostrar confirmación */
+            contactForm.hidden = true;
+            formSuccess.hidden = false;
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            /* If EmailJS is not yet configured, skip send and show success */
-            if (typeof emailjs === 'undefined' || EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-                showFormSuccess();
-                return;
-            }
-
-            Promise.all([
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER,  params),
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, params)
-            ])
-            .then(function () {
-                showFormSuccess();
-            })
-            .catch(function (err) {
-                console.error('EmailJS error:', err);
-                formBtn.disabled  = false;
-                formBtn.innerHTML = 'Error — Int\u00e9ntalo de nuevo';
-                setTimeout(function () {
-                    formBtn.disabled  = false;
-                    formBtn.innerHTML = BTN_DEFAULT;
-                }, 3500);
-            });
+            /* Abrir WhatsApp con mensaje pre-rellenado */
+            setTimeout(function () {
+                window.open(
+                    'https://wa.me/34677119453?text=' + encodeURIComponent(msg),
+                    '_blank',
+                    'noopener'
+                );
+            }, 900);
         });
-    }
-
-    function showFormSuccess() {
-        if (!contactForm || !formSuccess) return;
-        contactForm.hidden  = true;
-        formSuccess.hidden  = false;
-        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        /* Redirect to WhatsApp after 2.5 s */
-        setTimeout(function () {
-            window.open(
-                'https://wa.me/34677119453?text=Hola%20Ruso%2C%20acabo%20de%20rellenar%20el%20formulario%20de%20RusoFit.',
-                '_blank',
-                'noopener'
-            );
-        }, 2500);
     }
 
 }());
