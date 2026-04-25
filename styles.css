@@ -1011,6 +1011,139 @@ em { font-family: var(--f-serif); font-style: italic; }
 .footer__copy { font-size: 12px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; }
 
 /* =====================================================
+   CONTACTO — FORMULARIO
+   ===================================================== */
+.contacto {
+    padding: var(--sp) 0;
+    background: var(--bg-w);
+    border-top: 1px solid var(--border);
+}
+.contacto__wrap {
+    max-width: 780px;
+    margin: 0 auto;
+}
+.contacto__header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+.contacto__sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 480px;
+    margin: -8px auto 0;
+}
+
+/* Form layout */
+.contacto__form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+.form__row {
+    display: grid;
+    gap: 22px;
+}
+.form__row--2 { grid-template-columns: 1fr 1fr; }
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.form__label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: var(--ink);
+}
+
+/* Inputs & selects */
+.form__input {
+    font-family: var(--f-body);
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 13px 16px;
+    outline: none;
+    width: 100%;
+    transition: border-color var(--t) var(--ease),
+                box-shadow   var(--t) var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
+}
+.form__input::placeholder { color: var(--faint); }
+.form__input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(var(--red-rgb), 0.10);
+}
+.form__input.error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(var(--red-rgb), 0.10);
+}
+.form__select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235A5A5A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 17px;
+    padding-right: 42px;
+}
+
+/* Submit area */
+.form__submit {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 6px;
+}
+.form__btn { justify-content: center; }
+.form__privacy {
+    font-size: 12px;
+    color: var(--faint);
+    line-height: 1.55;
+    text-align: center;
+}
+
+/* Success state */
+.contacto__success {
+    text-align: center;
+    padding: 72px 32px;
+}
+.success__icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(var(--red-rgb), 0.07);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+}
+.success__icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: var(--red);
+}
+.contacto__success h3 {
+    font-family: var(--f-display);
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 16px;
+}
+.contacto__success p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* =====================================================
    KEYFRAMES
    ===================================================== */
 @keyframes fadeUp {
@@ -1094,6 +1227,7 @@ em { font-family: var(--f-serif); font-style: italic; }
     .proceso__steps { grid-template-columns: 1fr; }
     .evolucion__grid { grid-template-columns: repeat(2, 1fr); }
     .cta-final .btn--wa { width: 100%; justify-content: center; }
+    .form__row--2 { grid-template-columns: 1fr; }
 
     /* WhatsApp float */
     .wa-float { bottom: 20px; right: 20px; width: 50px; height: 50px; }
