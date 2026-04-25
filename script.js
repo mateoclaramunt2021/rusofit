@@ -241,8 +241,8 @@
 
     var EMAILJS_PUBLIC_KEY      = '7i1XqcX9I2ZKEbQ3H';
     var EMAILJS_SERVICE_ID      = 'service_tjscmwc';
-    var EMAILJS_TEMPLATE_OWNER  = 'template_wc8rpw9';
-    var EMAILJS_TEMPLATE_CLIENT = 'template_5ce5uop';
+    var EMAILJS_TEMPLATE_OWNER  = 'template_lylnqnb';
+    var EMAILJS_TEMPLATE_CLIENT = 'template_bhqekwt';
 
     var contactForm = document.getElementById('contactForm');
     var formSuccess = document.getElementById('formSuccess');
